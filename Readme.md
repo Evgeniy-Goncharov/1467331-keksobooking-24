@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Евгений Гончаров](https://up.htmlacademy.ru/javascript/24/user/1467331).
-* Наставник: `Неизвестно`.
+* Наставник: [Магомед Кандаев](https://htmlacademy.ru/profile/magomedkandaev).
 
 ---
 
