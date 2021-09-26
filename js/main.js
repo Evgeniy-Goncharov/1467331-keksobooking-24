@@ -3,11 +3,7 @@ function getRandomNumber (min, max) {
 }
 
 function checkRange (min, max) {
-  if (min >= 0 && min < max) {
-    return true;
-  }
-
-  return false;
+  return min >= 0 && min < max;
 }
 
 function getRandomInt(min, max) {
