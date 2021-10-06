@@ -25,89 +25,62 @@ function getRandomFloat(min, max, symbols) {
   return new Error('Функции передан неверный диапазон.');
 }
 
-// Объявляем функцию для создания исходных массивов
+function getRandomElement(array) {
+  return array[getRandomInt(0, array.length - 1)];
+}
 
-function createArray (length, cb) {
-  let index = 1;
-  const array = [];
-
-  while (array.length < length) {
-    cb(index, array);
-    index++;
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
 
   return array;
 }
 
-// Объявляем фунццию для создания и добавления в массив объекта author
+function getRandomShuffledArray (array) {
+  const randomArray = shuffleArray(array.slice());
+  return randomArray.slice(getRandomInt(0, randomArray.length));
+}
 
-function createOfferAuthor(index, array) {
-  const author = {
-    avatar: 'img/avatars/user',
+// Объявляем фунццию для создания author
+
+function generateAutor(index) {
+  const author = String(index).padStart(2, 0);
+
+  return {
+    avatar: `img/avatars/user${author}.png`,
   };
-
-  if (index < 10) {
-    author.avatar += `0${  index  }.png`;
-  } else {
-    author.avatar += `${index  }.png`;
-  }
-
-  array.push(author);
-  index++;
 }
 
-// Генерируем случайный массив преимуществ
+// Функция для получения случайных преимуществ в объвлении
 
-function getOfferFeatures() {
-  const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  const offerFeatures = [];
+// Объявляем исходные массивы данных для объявлений
 
-  for (let count = 0; count < getRandomInt(0, features.length); count++) {
-    const index = getRandomInt(0, features.length -1);
-    offerFeatures.push(features[index]);
-    features.splice(index, 1);
-  }
-
-  return offerFeatures;
-}
-
-// Объявляем и генерируем исходные массивы данных для объявлений
-
+const OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-const OFFER_CHECKINS = ['12:00', '13:00', '14:00'];
+const OFFER_TIMES = ['12:00', '13:00', '14:00'];
 const OFFER_FOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
 
-
-const offerAuthors = createArray(10, createOfferAuthor);
-const offerTitles = createArray(10, (index, array) => {
-  array.push(`Заголовок ${  index}`);
-  return index;
-});
-const offerAdresses = createArray(10, (index, array) => array.push(`${getRandomFloat(1, 100, 2)  }, ${  getRandomFloat(1, 100, 2)}`));
-const offerDescriptions = createArray(10, (index, array) => array.push(`Описание ${  index}`));
-
 // Описываем функцию для создания одного объявления
 
-function getOffer(arrayIndex) {
+function getOffer(index, location) {
+  const time = getRandomElement(OFFER_TIMES);
   const offer = {
-    title: offerTitles[arrayIndex],
-    adress: offerAdresses[arrayIndex],
+    title: `Заголовок ${  index}`,
+    address: `${String(location.lat)  }, ${ String(location.lng)}`,
     price: getRandomInt(100000, 1000000),
-    type: OFFER_TYPES[getRandomInt(0, 4)],
+    type: getRandomElement(OFFER_TYPES),
     rooms: getRandomInt(1, 10),
     guests: getRandomInt(1, 10),
-    checkin: OFFER_CHECKINS[getRandomInt(0, 2)],
-    checkout: OFFER_CHECKINS[getRandomInt(0, 2)],
-    features: getOfferFeatures(),
-    description: offerDescriptions[arrayIndex],
-    photos: OFFER_FOTOS.slice(getRandomInt(0, OFFER_FOTOS.length), getRandomInt(0, OFFER_FOTOS.length)),
-    location: {
-      lat: getRandomFloat(35.65000, 35.70000, 5),
-      lng: getRandomFloat(139.70000, 139.80000, 5),
-    },
+    checkin: time,
+    checkout: time,
+    features: getRandomShuffledArray(OFFER_FEATURES),
+    description: `Описание ${  index}`,
+    photos: getRandomShuffledArray(OFFER_FOTOS),
   };
 
   return offer;
@@ -115,17 +88,22 @@ function getOffer(arrayIndex) {
 
 // Собираем объявления в массив
 
-function getOffers(length) {
+function generateOffers(length) {
   const offers = [];
 
   for (let count = 0; count < length; count++) {
-    offers[count] = {
-      author: offerAuthors[count],
-      offer: getOffer(count),
+    const location = {
+      lat: getRandomFloat(35.65000, 35.70000, 5),
+      lng: getRandomFloat(139.70000, 139.80000, 5),
     };
+    offers.push({
+      author: generateAutor(count + 1),
+      offer: getOffer(count + 1, location),
+      location: location,
+    });
   }
 
   return offers;
 }
 
-getOffers(10);
+generateOffers(10);
