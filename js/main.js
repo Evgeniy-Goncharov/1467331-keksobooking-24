@@ -25,27 +25,28 @@ function getRandomFloat(min, max, symbols) {
   return new Error('Функции передан неверный диапазон.');
 }
 
-function getRandomElement(array) {
-  return array[getRandomInt(0, array.length - 1)];
+function getRandomElement(items) {
+  return items[getRandomInt(0, items.length - 1)];
 }
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
+function shuffleArray(items) {
+  const shuffledItems = items.slice();
+  for (let i = items.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [items[i], items[j]] = [items[j], items[i]];
   }
 
-  return array;
+  return shuffledItems;
 }
 
-function getRandomShuffledArray (array) {
-  const randomArray = shuffleArray(array.slice());
-  return randomArray.slice(getRandomInt(0, randomArray.length));
+function getRandomShuffledArray (items) {
+  const randomItems = shuffleArray(items);
+  return randomItems.slice(0, getRandomInt(0, randomItems.length));
 }
 
 // Объявляем фунццию для создания author
 
-function generateAutor(index) {
+function generateAuthor(index) {
   const author = String(index).padStart(2, 0);
 
   return {
@@ -53,34 +54,41 @@ function generateAutor(index) {
   };
 }
 
-// Функция для получения случайных преимуществ в объвлении
-
 // Объявляем исходные массивы данных для объявлений
 
+const OFFERS_QUANTITY = 10;
 const OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const OFFER_TIMES = ['12:00', '13:00', '14:00'];
-const OFFER_FOTOS = [
+const OFFER_PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'];
+const LATITUDE_RANGE = {
+  start: 35.65000,
+  end: 35.70000,
+};
+const LONGITUDE_RANGE = {
+  start: 139.70000,
+  end: 139.80000,
+};
 
 // Описываем функцию для создания одного объявления
 
 function getOffer(index, location) {
   const time = getRandomElement(OFFER_TIMES);
   const offer = {
-    title: `Заголовок ${  index}`,
-    address: `${String(location.lat)  }, ${ String(location.lng)}`,
-    price: getRandomInt(100000, 1000000),
+    title: `Заголовок ${index}`,
+    address: `${location.lat}, ${location.lng}`,
+    price: getRandomInt(1000, 1000000),
     type: getRandomElement(OFFER_TYPES),
     rooms: getRandomInt(1, 10),
     guests: getRandomInt(1, 10),
     checkin: time,
     checkout: time,
     features: getRandomShuffledArray(OFFER_FEATURES),
-    description: `Описание ${  index}`,
-    photos: getRandomShuffledArray(OFFER_FOTOS),
+    description: `Описание ${index}`,
+    photos: getRandomShuffledArray(OFFER_PHOTOS),
   };
 
   return offer;
@@ -91,14 +99,14 @@ function getOffer(index, location) {
 function generateOffers(length) {
   const offers = [];
 
-  for (let count = 0; count < length; count++) {
+  for (let count = 1; count <= length; count++) {
     const location = {
-      lat: getRandomFloat(35.65000, 35.70000, 5),
-      lng: getRandomFloat(139.70000, 139.80000, 5),
+      lat: getRandomFloat(LATITUDE_RANGE.start, LATITUDE_RANGE.end, 5),
+      lng: getRandomFloat(LONGITUDE_RANGE.start, LONGITUDE_RANGE.end, 5),
     };
     offers.push({
-      author: generateAutor(count + 1),
-      offer: getOffer(count + 1, location),
+      author: generateAuthor(count),
+      offer: getOffer(count, location),
       location: location,
     });
   }
@@ -106,4 +114,4 @@ function generateOffers(length) {
   return offers;
 }
 
-generateOffers(10);
+generateOffers(OFFERS_QUANTITY);
