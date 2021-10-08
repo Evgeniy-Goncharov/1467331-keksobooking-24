@@ -32,8 +32,8 @@ function getRandomElement(items) {
 function shuffleArray(items) {
   const shuffledItems = items.slice();
   for (let i = items.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    [items[i], items[j]] = [items[j], items[i]];
+    const randomItem = Math.floor(Math.random() * (i + 1));
+    [items[i], items[randomItem]] = [items[randomItem], items[i]];
   }
 
   return shuffledItems;
