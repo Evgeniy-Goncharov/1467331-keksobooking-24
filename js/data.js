@@ -2,7 +2,6 @@ import {getRandomInt, getRandomFloat, getRandomElement, getRandomShuffledArray} 
 
 // Объявляем исходные массивы И константы данных для объявлений
 
-const OFFERS_QUANTITY = 10;
 const OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const OFFER_TIMES = ['12:00', '13:00', '14:00'];
@@ -70,4 +69,4 @@ function generateOffers(length) {
   return offers;
 }
 
-export {generateOffers, OFFERS_QUANTITY};
+export {generateOffers};
