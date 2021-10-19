@@ -78,6 +78,4 @@ offersList.forEach(({author, offer}) => {
   cardListFragment.appendChild(card);
 });
 
-console.log(cardListFragment);
-
 map.appendChild(cardListFragment.firstChild);
