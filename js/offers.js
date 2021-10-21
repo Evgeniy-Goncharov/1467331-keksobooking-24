@@ -1,8 +1,6 @@
-import {generateOffers} from './data.js';
-
 // Объявляем константы
 
-const OFFERS_QUANTITY = 10;
+
 const HOUSE_TYPES = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -14,68 +12,78 @@ const HOUSE_TYPES = {
 // Объявляем переменные
 
 const map = document.querySelector('.map__canvas');
-const offersList = generateOffers(OFFERS_QUANTITY);
 const offerTemplate = document.querySelector('#card').content.querySelector('.popup');
-const cardListFragment = document.createDocumentFragment();
 
 // Функция для получения разметки списка преимуществ
 
 function getOfferFeatures(card, features) {
   const templateFeatures = card.querySelector('.popup__features');
-  const featuresList = templateFeatures.querySelectorAll('.popup__feature');
 
-  featuresList.forEach((featuresListItem) => {
-    const isNecessary = features.some(
-      (feature) => featuresListItem.classList.contains(`popup__feature--${ feature}`),
-    );
+  if (features.length > 0) {
+    const featuresList = templateFeatures.querySelectorAll('.popup__feature');
 
-    if (!isNecessary) {
-      featuresListItem.remove();
-    }
-  });
+    featuresList.forEach((featuresListItem) => {
+      const isNecessary = features.some(
+        (feature) => featuresListItem.classList.contains(`popup__feature--${ feature}`),
+      );
+
+      if (!isNecessary) {
+        featuresListItem.remove();
+      }
+    });
+  } else {templateFeatures.classList.add('hidden');}
 }
 
 // Функция для получения разметки списка фотографий
 
 function getOfferPhotos (card, photos) {
   const photosList = card.querySelector('.popup__photos');
-  const photosItem = photosList.querySelector('img');
-  const photosListFragment = document.createDocumentFragment();
 
-  photos.forEach((photo) => {
-    const newPhotosItem = photosItem.cloneNode(true);
-    newPhotosItem.src = photo;
-    photosListFragment.appendChild(newPhotosItem);
-  });
+  if (photos.length > 0) {
+    const photosItem = photosList.querySelector('img');
+    const photosListFragment = document.createDocumentFragment();
 
-  photosList.innerHTML = '';
-  photosList.appendChild(photosListFragment);
+    photos.forEach((photo) => {
+      const newPhotosItem = photosItem.cloneNode(true);
+      newPhotosItem.src = photo;
+      photosListFragment.appendChild(newPhotosItem);
+    });
+
+    photosList.innerHTML = '';
+    photosList.appendChild(photosListFragment);
+  } else {photosList.classList.add('hidden');}
 }
 
-// Функция для получения разметки описания объявления
+// Функция для получения разметки объявления
 
-function getOfferDescription(card, {title, addres, price, type, rooms, guests, description, checkin, checkout, features, photos}) {
-  function changeTextContent(id, content) {
-    card.querySelector(id).textContent = content;
+function getOffer({author, offer}) {
+  const card = offerTemplate.cloneNode(true);
+  const {title, address, price, type, rooms, guests, checkin, checkout, description, features, photos} = offer;
+
+  function changeTextContent(selector, content) {
+    if (content) {
+      card.querySelector(selector).textContent = content;
+      return;
+    }
+
+    card.querySelector(selector).classList.add('hidden');
   }
 
+  if (author.avatar) {
+    card.querySelector('.popup__avatar').src = author.avatar;
+  } else {card.querySelector('.popup__avatar').classList.add('hidden');}
+
   changeTextContent('.popup__title', title);
-  changeTextContent('.popup__text--address', addres);
-  card.querySelector('.popup__text--price').textContent = `${price  } ₽/ночь`;
+  changeTextContent('.popup__text--address', address);
+  changeTextContent('.popup__text--price', `${price  } ₽/ночь`);
   changeTextContent('.popup__type', HOUSE_TYPES[type]);
-  card.querySelector('.popup__text--capacity').textContent = `${rooms  } комнаты для ${  guests  } гостей`;
-  card.querySelector('.popup__text--time').textContent = `Заезд после ${ checkin }, выезд до ${ checkout}`;
+  changeTextContent('.popup__text--capacity', `${rooms  } комнаты для ${  guests  } гостей`);
+  changeTextContent('.popup__text--time', `Заезд после ${ checkin }, выезд до ${ checkout}`);
   changeTextContent('.popup__description', description);
   getOfferFeatures(card, features);
   getOfferPhotos(card, photos);
+
+  map.appendChild(card);
 }
 
-offersList.forEach(({author, offer}) => {
-  const card = offerTemplate.cloneNode(true);
-
-  card.querySelector('.popup__avatar').src = author.avatar;
-  getOfferDescription(card, offer);
-  cardListFragment.appendChild(card);
-});
-
-map.appendChild(cardListFragment.firstChild);
+export {getOffer};
