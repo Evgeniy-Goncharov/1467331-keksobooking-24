@@ -35,7 +35,7 @@ function getOffer(index, location) {
   const offer = {
     title: `Заголовок ${index}`,
     address: `${location.lat}, ${location.lng}`,
-    price: getRandomInt(1000, 1000000),
+    price: getRandomInt(0, 10000),
     type: getRandomElement(OFFER_TYPES),
     rooms: getRandomInt(1, 10),
     guests: getRandomInt(1, 10),
