@@ -82,10 +82,7 @@ submitButton.addEventListener('click', (evt) => {
   const rooms = roomNumberSelect.value;
   const guests = capacitySelect.value;
 
-  console.log(rooms + ' ' +guests);
-
   if (!getGuestsValidity(rooms, guests)) {
-    console.log('Неверное количество гостей');
     evt.preventDefault();
   }
 });
