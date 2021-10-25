@@ -1,7 +1,7 @@
 const form = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const titleInput = form.querySelector('#title');
-const addressInput = form.querySelector('#address');
+const addressInput = form.querySelector('#address').setAttribute('readonly', true);
 const priceInput = form.querySelector('#price');
 const roomNumberSelect = form.querySelector('#room_number');
 const capacitySelect = form.querySelector('#capacity');
@@ -91,13 +91,6 @@ titleInput.addEventListener('input', () => {
   titleInput.reportValidity();
 });
 
-// Обработчик ввода координат
-
-addressInput.addEventListener('input', () => {
-  addressInput.setCustomValidity('Это поле заполняется автоматически');
-  addressInput.reportValidity();
-});
-
 // Обработчик ввода цены
 
 priceInput.addEventListener('input', () => {
@@ -142,4 +135,4 @@ submitButton.addEventListener('click', (evt) => {
   }
 });
 
-export {enableForm, enableFilter};
+export {enableForm, enableFilter, addressInput};
