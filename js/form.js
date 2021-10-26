@@ -1,4 +1,5 @@
 const form = document.querySelector('.ad-form');
+const mapFilters = document.querySelector('.map__filters');
 const titleInput = form.querySelector('#title');
 const priceInput = form.querySelector('#price');
 const roomNumberSelect = form.querySelector('#room_number');
@@ -24,6 +25,52 @@ function getGuestsValidity (rooms, guests) {
   capacitySelect.reportValidity();
   return true;
 }
+
+// Функции для деактивации форм
+
+function disableForm () {
+  const formFieldsets = form.querySelectorAll('fieldset');
+
+  form.classList.add('ad-form--disabled');
+
+  formFieldsets.forEach((element) => element.disabled = true);
+}
+
+function disableFilter() {
+  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
+  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
+
+  mapFilters.classList.add('map__filters--disabled');
+
+  mapFiltersElements.forEach((element) => element.disabled = true);
+  mapFiltersFieldsets.forEach((element) => element.disabled = true);
+}
+
+// Функции для активации форм
+
+function enableForm () {
+  const formFieldsets = form.querySelectorAll('fieldset');
+
+  form.classList.remove('ad-form--disabled');
+  formFieldsets.forEach((element) => element.disabled = false);
+}
+
+function enableFilter() {
+  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
+  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
+
+  mapFilters.classList.remove('map__filters--disabled');
+
+  mapFiltersElements.forEach((element) => element.disabled = false);
+  mapFiltersFieldsets.forEach((element) => element.disabled = false);
+}
+
+// Обработчик загрузки страницы
+
+document.addEventListener('DOMContentLoaded', () => {
+  disableForm();
+  disableFilter();
+});
 
 // Обработчик ввода заголовка
 
@@ -86,3 +133,5 @@ submitButton.addEventListener('click', (evt) => {
     evt.preventDefault();
   }
 });
+
+export {enableForm, enableFilter};
