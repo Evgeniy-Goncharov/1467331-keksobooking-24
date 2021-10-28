@@ -5,17 +5,24 @@ const COORDS = {
   lat: 35.68225,
   lng: 139.75196,
 };
+const SCALE = 15;
 
-let map;
 const addressInput = document.querySelector('#address');
+const mainIconUrl = './../img/main-pin.svg';
+const mainIconSizes = [52, 52];
+const mainIconAnchorCoords = [26, 52];
+const iconUrl = './../img/pin.svg';
+const iconSizes = [40, 40];
+const iconAnchorCoords = [20, 40];
+let map;
 
 // Функция для добавления основного маркера
 
 function createMainOfferMarker () {
   const mainPinIcon = L.icon({
-    iconUrl: './../img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
+    iconUrl: mainIconUrl,
+    iconSize: mainIconSizes,
+    iconAnchor: mainIconAnchorCoords,
   });
 
   const mainPinMarker = L.marker(
@@ -28,7 +35,7 @@ function createMainOfferMarker () {
 
   mainPinMarker.addTo(map);
 
-  mainPinMarker.on('moveend', (evt) => {
+  mainPinMarker.on('move', (evt) => {
     const coords = evt.target.getLatLng();
     addressInput.value = `${coords.lat.toFixed(5)  }, ${  coords.lng.toFixed(5)}`;
   });
@@ -56,9 +63,9 @@ function createSimilarOfferMarker (offer, pinIcon) {
 
 function createSimilarOffersMarkers (offers) {
   const pinIcon = L.icon({
-    iconUrl: './../img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+    iconUrl: iconUrl,
+    iconSize: iconSizes,
+    iconAnchor: iconAnchorCoords,
   });
 
   offers.forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
@@ -74,7 +81,7 @@ function loadMap () {
       addressInput.value = `${COORDS.lat  }, ${  COORDS.lng}`;
     })
 
-    .setView(COORDS, 15);
+    .setView(COORDS, SCALE);
 
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
