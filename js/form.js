@@ -65,13 +65,6 @@ function enableFilter() {
   mapFiltersFieldsets.forEach((element) => element.disabled = false);
 }
 
-// Обработчик загрузки страницы
-
-document.addEventListener('DOMContentLoaded', () => {
-  disableForm();
-  disableFilter();
-});
-
 // Обработчик ввода заголовка
 
 titleInput.addEventListener('input', () => {
@@ -134,4 +127,4 @@ submitButton.addEventListener('click', (evt) => {
   }
 });
 
-export {enableForm, enableFilter};
+export {disableForm, disableFilter, enableForm, enableFilter};

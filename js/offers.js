@@ -11,7 +11,6 @@ const HOUSE_TYPES = {
 
 // Объявляем переменные
 
-const map = document.querySelector('.map__canvas');
 const offerTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 // Функция для получения разметки списка преимуществ
@@ -83,7 +82,7 @@ function getOffer({author, offer}) {
   getOfferFeatures(card, features);
   getOfferPhotos(card, photos);
 
-  map.appendChild(card);
+  return card;
 }
 
 export {getOffer};

@@ -1,9 +1,16 @@
-import {generateOffers} from './data.js';
-import {getOffer} from './offers.js';
-import {getRandomInt} from './util.js';
-import './form.js';
+import { disableFilter, disableForm } from './form.js';
+import { loadMap, createMainOfferMarker, createSimilarOffersMarkers } from './map.js';
+import { generateOffers } from './data.js';
 
 const OFFERS_QUANTITY = 10;
-const offersList = generateOffers(OFFERS_QUANTITY);
+const offers = generateOffers(OFFERS_QUANTITY);
 
-getOffer(offersList[getRandomInt(1, OFFERS_QUANTITY)]);
+// Обработчик загрузки страницы
+
+
+disableForm();
+disableFilter();
+loadMap();
+createMainOfferMarker();
+createSimilarOffersMarkers(offers);
+
