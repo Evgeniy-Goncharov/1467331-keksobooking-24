@@ -15,7 +15,7 @@ const offerTemplate = document.querySelector('#card').content.querySelector('.po
 
 // Функция для получения разметки списка преимуществ
 
-function getOfferFeatures(card, features) {
+function getOfferFeatures(card, features = []) {
   const templateFeatures = card.querySelector('.popup__features');
 
   if (features.length > 0) {
@@ -30,12 +30,14 @@ function getOfferFeatures(card, features) {
         featuresListItem.remove();
       }
     });
-  } else {templateFeatures.classList.add('hidden');}
+  } else {
+    templateFeatures.classList.add('hidden');
+  }
 }
 
 // Функция для получения разметки списка фотографий
 
-function getOfferPhotos (card, photos) {
+function getOfferPhotos (card, photos = []) {
   const photosList = card.querySelector('.popup__photos');
 
   if (photos.length > 0) {

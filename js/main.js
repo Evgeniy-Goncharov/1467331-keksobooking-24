@@ -1,16 +1,15 @@
-import { disableFilter, disableForm } from './form.js';
+import { disableFilter, disableForm, setFormSubmit } from './form.js';
 import { loadMap, createMainOfferMarker, createSimilarOffersMarkers } from './map.js';
-import { generateOffers } from './data.js';
+import { getData } from './api.js';
+import { showAlert } from './util.js';
 
-const OFFERS_QUANTITY = 10;
-const offers = generateOffers(OFFERS_QUANTITY);
-
-// Обработчик загрузки страницы
-
+const OFFERS_QUANTITY = 20;
 
 disableForm();
 disableFilter();
 loadMap();
 createMainOfferMarker();
-createSimilarOffersMarkers(offers);
+getData(createSimilarOffersMarkers, showAlert);
+setFormSubmit(disableForm);
 
+export { OFFERS_QUANTITY };
