@@ -1,5 +1,6 @@
 import {enableFilter, enableForm} from './form.js';
 import { getOffer } from './offers.js';
+import { OFFERS_QUANTITY } from './main.js';
 
 const COORDS = {
   lat: 35.68225,
@@ -14,25 +15,23 @@ const mainIconAnchorCoords = [26, 52];
 const iconUrl = './../img/pin.svg';
 const iconSizes = [40, 40];
 const iconAnchorCoords = [20, 40];
+const mainPinIcon = L.icon({
+  iconUrl: mainIconUrl,
+  iconSize: mainIconSizes,
+  iconAnchor: mainIconAnchorCoords,
+});
+const mainPinMarker = L.marker(
+  COORDS,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
 let map;
 
 // Функция для добавления основного маркера
 
 function createMainOfferMarker () {
-  const mainPinIcon = L.icon({
-    iconUrl: mainIconUrl,
-    iconSize: mainIconSizes,
-    iconAnchor: mainIconAnchorCoords,
-  });
-
-  const mainPinMarker = L.marker(
-    COORDS,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-
   mainPinMarker.addTo(map);
 
   mainPinMarker.on('move', (evt) => {
@@ -52,7 +51,7 @@ function createSimilarOfferMarker (offer, pinIcon) {
     lng,
   },
   {
-    draggable: true,
+    draggable: false,
     icon: pinIcon,
   });
 
@@ -68,7 +67,7 @@ function createSimilarOffersMarkers (offers) {
     iconAnchor: iconAnchorCoords,
   });
 
-  offers.forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
+  offers.slice(0, OFFERS_QUANTITY).forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
 }
 
 // Функция добавления карты
@@ -91,4 +90,15 @@ function loadMap () {
   ).addTo(map);
 }
 
-export {loadMap, createMainOfferMarker, createSimilarOffersMarkers};
+// Чистим карту
+
+function resetMap () {
+  map.setView(
+    COORDS,
+    SCALE,
+  );
+  mainPinMarker.setLatLng(COORDS);
+  map.closePopup();
+}
+
+export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers};
