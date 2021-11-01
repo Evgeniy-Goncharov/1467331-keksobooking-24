@@ -1,11 +1,8 @@
 import { clearFilter, clearForm, disableFilter } from './form.js';
 import { resetMap } from './map.js';
 
-const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
-
 function getData (onSuccess, onFail) {
-  fetch('https://24.javascript.pages.academy/keksobaking/data')
+  fetch('https://24.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -32,7 +29,7 @@ const sendData = (onSuccess, onFail, data) => {
   )
     .then((response) => {
       if (response.ok) {
-        onSuccess(successMessageTemplate);
+        onSuccess();
         clearFilter();
         clearForm();
         resetMap();
@@ -41,7 +38,7 @@ const sendData = (onSuccess, onFail, data) => {
       }
     })
     .catch(() => {
-      onFail(errorMessageTemplate);
+      onFail();
     });
 };
 

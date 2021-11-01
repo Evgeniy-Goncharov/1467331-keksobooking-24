@@ -9,6 +9,9 @@ const roomNumberSelect = form.querySelector('#room_number');
 const capacitySelect = form.querySelector('#capacity');
 const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
+const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+let message;
 
 // Функция для проверки количества комнат и гостей
 
@@ -162,44 +165,47 @@ function setFormSubmit () {
   });
 }
 
+// Обработчик нажатия Esc
+
+function onMessageEscKeydown (evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault;
+    message.remove();
+    document.removeEventListener('keydown', onMessageEscKeydown);
+  }
+}
+
 // Показываем сообщение об успешной отправке формы
 
-function showSuccessMessage (template) {
-  const message = template.cloneNode(true);
+function showSuccessMessage () {
+  message = successMessageTemplate.cloneNode(true);
 
   message.addEventListener('click', () => {
     message.remove();
+    document.removeEventListener('keydown', onMessageEscKeydown);
   });
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      message.remove();
-    }
-  });
+  document.addEventListener('keydown', onMessageEscKeydown);
 
   document.body.appendChild(message);
 }
 
 // Показываем сообщение об ошибке
 
-function showErrorMessage (template) {
-  const message = template.cloneNode(true);
+function showErrorMessage () {
+  message = errorMessageTemplate.cloneNode(true);
   const messageCloseButton = message.querySelector('.error__button');
+
+  document.addEventListener('keydown', onMessageEscKeydown);
 
   message.addEventListener('click', () => {
     message.remove();
+    document.removeEventListener('keydown', onMessageEscKeydown);
   });
 
   messageCloseButton.addEventListener('click', () => {
     message.remove();
-  });
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      message.remove();
-    }
+    document.removeEventListener('keydown', onMessageEscKeydown);
   });
 
   document.body.appendChild(message);
