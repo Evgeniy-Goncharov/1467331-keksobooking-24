@@ -19,7 +19,7 @@ function getData (onSuccess, onFail) {
     });
 }
 
-const sendData = (onSuccess, onFail, data) => {
+function sendData (onSuccess, onFail, data) {
   fetch(
     'https://24.javascript.pages.academy/keksobooking',
     {
@@ -40,7 +40,6 @@ const sendData = (onSuccess, onFail, data) => {
     .catch(() => {
       onFail();
     });
-};
+}
 
 export {getData, sendData};
-
