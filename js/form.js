@@ -90,6 +90,8 @@ function clearFilter () {
 
 function getMinPrice(type) {
   switch(type) {
+    case 'bungalow':
+      return 0;
     case 'flat':
       return 1000;
     case 'hotel':
@@ -98,8 +100,6 @@ function getMinPrice(type) {
       return 5000;
     case 'palace':
       return 10000;
-    default:
-      return 0;
   }
 }
 
