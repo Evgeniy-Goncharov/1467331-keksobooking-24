@@ -5,6 +5,9 @@ const form = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const titleInput = form.querySelector('#title');
 const priceInput = form.querySelector('#price');
+const typeSelect = form.querySelector('#type');
+const timeinSelect = form.querySelector('#timein');
+const timeoutSelect = form.querySelector('#timeout');
 const roomNumberSelect = form.querySelector('#room_number');
 const capacitySelect = form.querySelector('#capacity');
 const submitButton = form.querySelector('.ad-form__submit');
@@ -83,6 +86,30 @@ function clearFilter () {
   mapFilters.reset();
 }
 
+// Получаем минимальное значение в поле "Цена за ночь"
+
+function getMinPrice(type) {
+  switch(type) {
+    case 'bungalow':
+      return 0;
+    case 'flat':
+      return 1000;
+    case 'hotel':
+      return 3000;
+    case 'house':
+      return 5000;
+    case 'palace':
+      return 10000;
+  }
+}
+
+// Синхронизируем поля "въезд, выезд"
+
+function synchronizeTimeInputs (time) {
+  timeinSelect.value = time;
+  timeoutSelect.value = time;
+}
+
 // Обработчик ввода заголовка
 
 titleInput.addEventListener('input', () => {
@@ -101,6 +128,14 @@ titleInput.addEventListener('input', () => {
   titleInput.reportValidity();
 });
 
+// Обработчик типа жилья
+
+typeSelect.addEventListener('change', (evt) => {
+  const minPrice = getMinPrice(evt.target.value);
+  priceInput.min = minPrice;
+  priceInput.placeholder = minPrice;
+});
+
 // Обработчик ввода цены
 
 priceInput.addEventListener('input', () => {
@@ -114,6 +149,18 @@ priceInput.addEventListener('input', () => {
   }
 
   priceInput.reportValidity();
+});
+
+// Обработчик времени заезда
+
+timeinSelect.addEventListener('change', (evt) => {
+  synchronizeTimeInputs(evt.target.value);
+});
+
+// Обработчик времени выезда
+
+timeoutSelect.addEventListener('change', (evt) => {
+  synchronizeTimeInputs(evt.target.value);
 });
 
 // Обработчик ввода количества комнат
