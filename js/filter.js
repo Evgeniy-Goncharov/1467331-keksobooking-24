@@ -1,9 +1,5 @@
-import { offers } from './api.js';
-import { clearMarkers, closePopup, createSimilarOffersMarkers } from './map.js';
-
 const mapFilters = document.querySelector('.map__filters');
 const featuresFilter = mapFilters.querySelector('.map__features');
-let filteredOffers;
 
 function disableFilter() {
   const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
@@ -33,18 +29,18 @@ function isFilter (value) {
   return value === 'any';
 }
 
-function filterOffers () {
+const filterOffers = (offers) => {
   const typeSelect = mapFilters.querySelector('#housing-type');
   const priceSelect = mapFilters.querySelector('#housing-price');
   const roomsSelect = mapFilters.querySelector('#housing-rooms');
   const guestsSelect = mapFilters.querySelector('#housing-guests');
-
-  filteredOffers = offers.slice();
+  let filteredOffers = offers.slice();
 
   function filterData (value, cb) {
     if (!isFilter(value)) {
-      filteredOffers = filteredOffers.slice().filter(cb);
+      return filteredOffers.filter(cb);
     }
+    return filteredOffers;
   }
 
   function filterOnType ({offer}) {
@@ -73,14 +69,15 @@ function filterOffers () {
     }
   }
 
-  filterData(typeSelect.value, filterOnType);
-  filterData(priceSelect.value, filterOnPrice);
-  filterData(roomsSelect.value, filterOnRooms);
-  filterData(guestsSelect.value, filterOnGuests);
-}
+  filteredOffers = filterData(typeSelect.value, filterOnType);
+  filteredOffers = filterData(priceSelect.value, filterOnPrice);
+  filteredOffers = filterData(roomsSelect.value, filterOnRooms);
+  filteredOffers = filterData(guestsSelect.value, filterOnGuests);
 
-function sortOffersByRank (elements) {
-  const featureInputs = featuresFilter.querySelectorAll('[type="checkbox"]');
+  return filteredOffers;
+};
+
+function sortOffersByRank (offers) {
   const checkedFeatures = [];
 
   function isCheckedFeature (offerFeature) {
@@ -88,6 +85,8 @@ function sortOffersByRank (elements) {
   }
 
   function getCheckedFeatures () {
+    const featureInputs = featuresFilter.querySelectorAll('[type="checkbox"]');
+
     for (const input of featureInputs) {
       if (input.checked) {
         checkedFeatures.push(input.value);
@@ -111,15 +110,19 @@ function sortOffersByRank (elements) {
   }
 
   getCheckedFeatures();
-  elements.sort((a, b) => getOfferRank(b) - getOfferRank(a));
+  offers.sort((a, b) => getOfferRank(b) - getOfferRank(a));
 }
 
-mapFilters.addEventListener('change', () => {
-  filterOffers();
+function getFilteredSortedoffers (offers) {
+  const filteredOffers = filterOffers(offers);
   sortOffersByRank(filteredOffers);
-  closePopup();
-  clearMarkers();
-  createSimilarOffersMarkers(filteredOffers);
-});
+  return filteredOffers;
+}
 
-export { disableFilter, enableFilter, clearFilter };
+function setFilterClick (offers, cb) {
+  mapFilters.addEventListener('change', () => {
+    cb(getFilteredSortedoffers(offers));
+  });
+}
+
+export { disableFilter, enableFilter, clearFilter, setFilterClick };

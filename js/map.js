@@ -65,6 +65,18 @@ function createMainOfferMarker () {
   });
 }
 
+// Чистим метки
+
+function clearMarkers () {
+  markerGroup.clearLayers();
+}
+
+// Закрываем попапы
+
+function closePopup () {
+  map.closePopup();
+}
+
 // Функция для создания одного похожего объявления
 
 function createSimilarOfferMarker (offer, pinIcon) {
@@ -86,6 +98,8 @@ function createSimilarOfferMarker (offer, pinIcon) {
 // Функция добавления похожих объявлений
 
 function createSimilarOffersMarkers (offers) {
+  clearMarkers();
+
   const pinIcon = L.icon({
     iconUrl: iconUrl,
     iconSize: iconSizes,
@@ -93,18 +107,6 @@ function createSimilarOffersMarkers (offers) {
   });
 
   offers.slice(0, OFFERS_QUANTITY).forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
-}
-
-// Закрываем попапы
-
-function closePopup () {
-  map.closePopup();
-}
-
-// Чистим метки
-
-function clearMarkers () {
-  markerGroup.clearLayers();
 }
 
 // Сбрасываем карту
