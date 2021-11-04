@@ -1,5 +1,8 @@
-import { clearFilter, clearForm, disableFilter } from './form.js';
-import { resetMap } from './map.js';
+import { clearForm } from './form.js';
+import { clearFilter, disableFilter } from './filter.js';
+import { closePopup, resetMap } from './map.js';
+
+let offers;
 
 function getData (onSuccess, onFail) {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
@@ -10,8 +13,9 @@ function getData (onSuccess, onFail) {
 
       throw new Error();
     })
-    .then((offers) => {
-      onSuccess(offers);
+    .then((data) => {
+      offers = data;
+      onSuccess(data);
     })
     .catch(() => {
       disableFilter();
@@ -32,6 +36,7 @@ function sendData (onSuccess, onFail, data) {
         onSuccess();
         clearFilter();
         clearForm();
+        closePopup();
         resetMap();
       } else {
         throw new Error();
@@ -42,4 +47,4 @@ function sendData (onSuccess, onFail, data) {
     });
 }
 
-export {getData, sendData};
+export {getData, sendData, offers};

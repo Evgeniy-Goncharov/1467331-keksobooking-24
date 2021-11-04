@@ -1,4 +1,5 @@
-import {enableFilter, enableForm} from './form.js';
+import { enableForm } from './form.js';
+import { enableFilter } from './filter.js';
 import { getOffer } from './offers.js';
 import { OFFERS_QUANTITY } from './main.js';
 
@@ -27,7 +28,31 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
 let map;
+let markerGroup;
+
+// Функция добавления карты
+
+function loadMap () {
+  map = L.map('map-canvas')
+    .on('load', () => {
+      enableFilter();
+      enableForm();
+      addressInput.value = `${COORDS.lat  }, ${  COORDS.lng}`;
+    })
+
+    .setView(COORDS, SCALE);
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+
+  markerGroup = L.layerGroup().addTo(map);
+}
 
 // Функция для добавления основного маркера
 
@@ -55,7 +80,7 @@ function createSimilarOfferMarker (offer, pinIcon) {
     icon: pinIcon,
   });
 
-  marker.addTo(map).bindPopup(getOffer(offer));
+  marker.addTo(markerGroup).bindPopup(getOffer(offer));
 }
 
 // Функция добавления похожих объявлений
@@ -70,27 +95,19 @@ function createSimilarOffersMarkers (offers) {
   offers.slice(0, OFFERS_QUANTITY).forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
 }
 
-// Функция добавления карты
+// Закрываем попапы
 
-function loadMap () {
-  map = L.map('map-canvas')
-    .on('load', () => {
-      enableFilter();
-      enableForm();
-      addressInput.value = `${COORDS.lat  }, ${  COORDS.lng}`;
-    })
-
-    .setView(COORDS, SCALE);
-
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
+function closePopup () {
+  map.closePopup();
 }
 
-// Чистим карту
+// Чистим метки
+
+function clearMarkers () {
+  markerGroup.clearLayers();
+}
+
+// Сбрасываем карту
 
 function resetMap () {
   map.setView(
@@ -98,7 +115,6 @@ function resetMap () {
     SCALE,
   );
   mainPinMarker.setLatLng(COORDS);
-  map.closePopup();
 }
 
-export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers};
+export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers, closePopup, clearMarkers};

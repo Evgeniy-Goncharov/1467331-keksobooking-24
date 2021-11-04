@@ -1,8 +1,8 @@
 import { sendData } from './api.js';
-import { COORDS, addressInput, resetMap } from './map.js';
+import { COORDS, addressInput, resetMap, closePopup } from './map.js';
+import { clearFilter } from './filter.js';
 
 const form = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
 const titleInput = form.querySelector('#title');
 const priceInput = form.querySelector('#price');
 const typeSelect = form.querySelector('#type');
@@ -36,7 +36,7 @@ function getGuestsValidity (rooms, guests) {
   return true;
 }
 
-// Функции для деактивации форм
+// Функции для деактивации формы
 
 function disableForm () {
   const formFieldsets = form.querySelectorAll('fieldset');
@@ -46,27 +46,7 @@ function disableForm () {
   formFieldsets.forEach((element) => element.disabled = true);
 }
 
-function disableFilter() {
-  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
-  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
-
-  mapFilters.classList.add('map__filters--disabled');
-
-  mapFiltersElements.forEach((element) => element.disabled = true);
-  mapFiltersFieldsets.forEach((element) => element.disabled = true);
-}
-
 // Активации форм
-
-function enableFilter() {
-  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
-  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
-
-  mapFilters.classList.remove('map__filters--disabled');
-
-  mapFiltersElements.forEach((element) => element.disabled = false);
-  mapFiltersFieldsets.forEach((element) => element.disabled = false);
-}
 
 function enableForm () {
   const formFieldsets = form.querySelectorAll('fieldset');
@@ -80,10 +60,6 @@ function enableForm () {
 function clearForm () {
   form.reset();
   addressInput.value = `${COORDS.lat}, ${COORDS.lng}`;
-}
-
-function clearFilter () {
-  mapFilters.reset();
 }
 
 // Получаем минимальное значение в поле "Цена за ночь"
@@ -198,6 +174,7 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   clearFilter();
   clearForm();
+  closePopup();
   resetMap();
 });
 
@@ -258,4 +235,4 @@ function showErrorMessage () {
   document.body.appendChild(message);
 }
 
-export { disableForm, disableFilter, enableForm, enableFilter, clearForm, clearFilter, setFormSubmit };
+export { disableForm, enableForm, clearForm, setFormSubmit };
