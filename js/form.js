@@ -14,6 +14,10 @@ const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const avatarChooser = form.querySelector('#avatar');
+const avatarPreview = form.querySelector('.ad-form-header__preview');
+const imagesChooser = form.querySelector('#images');
+const imagesPreview = form.querySelector('.ad-form__photo');
 let message;
 
 // Функция для проверки количества комнат и гостей
@@ -178,6 +182,7 @@ resetButton.addEventListener('click', (evt) => {
   resetMap();
 });
 
+
 // Обработчик отправки формы
 function setFormSubmit () {
   form.addEventListener('submit', (evt) => {
@@ -234,5 +239,38 @@ function showErrorMessage () {
 
   document.body.appendChild(message);
 }
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+function setFileUploadPreview (chooser, preview) {
+  let previewImage = preview.querySelector('img');
+
+  chooser.addEventListener('change', () => {
+    const file = chooser.files[0];
+    const fileName = file.name.toLowerCase();
+
+    const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+
+    if (matches) {
+      if (previewImage) {
+        previewImage.style.width = '70px';
+        previewImage.style.height = '70px';
+        previewImage.style.borderRadius = '5px';
+        previewImage.src = URL.createObjectURL(file);
+      } else {
+        previewImage = document.createElement('img');
+        previewImage.style.width = '70px';
+        previewImage.style.height = '70px';
+        previewImage.style.borderRadius = '5px';
+        previewImage.src =  URL.createObjectURL(file);
+        preview.append(previewImage);
+      }
+    }
+  });
+}
+
+setFileUploadPreview(avatarChooser, avatarPreview);
+setFileUploadPreview (imagesChooser, imagesPreview);
+
 
 export { disableForm, enableForm, clearForm, setFormSubmit };
