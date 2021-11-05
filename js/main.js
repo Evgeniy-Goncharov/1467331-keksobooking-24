@@ -1,15 +1,21 @@
-import { disableFilter, disableForm, setFormSubmit } from './form.js';
+import { disableForm, setFormSubmit } from './form.js';
+import { disableFilter, setFilterClick } from './filter.js';
 import { loadMap, createMainOfferMarker, createSimilarOffersMarkers } from './map.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
+import { debounce } from './utils/debounce.js';
 
-const OFFERS_QUANTITY = 20;
+const OFFERS_QUANTITY = 10;
+const CREATE_MARKER_DELAY = 500;
 
 disableForm();
 disableFilter();
 loadMap();
 createMainOfferMarker();
-getData(createSimilarOffersMarkers, showAlert);
+getData((offers) => {
+  createSimilarOffersMarkers(offers);
+  setFilterClick(offers, debounce(createSimilarOffersMarkers, CREATE_MARKER_DELAY));
+}, showAlert);
 setFormSubmit(disableForm);
 
 export { OFFERS_QUANTITY };

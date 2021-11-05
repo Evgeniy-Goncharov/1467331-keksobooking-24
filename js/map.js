@@ -1,4 +1,5 @@
-import {enableFilter, enableForm} from './form.js';
+import { enableForm } from './form.js';
+import { enableFilter } from './filter.js';
 import { getOffer } from './offers.js';
 import { OFFERS_QUANTITY } from './main.js';
 
@@ -27,48 +28,9 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
+
 let map;
-
-// Функция для добавления основного маркера
-
-function createMainOfferMarker () {
-  mainPinMarker.addTo(map);
-
-  mainPinMarker.on('move', (evt) => {
-    const coords = evt.target.getLatLng();
-    addressInput.value = `${coords.lat.toFixed(5)  }, ${  coords.lng.toFixed(5)}`;
-  });
-}
-
-// Функция для создания одного похожего объявления
-
-function createSimilarOfferMarker (offer, pinIcon) {
-  const {location} = offer;
-  const {lat, lng} = location;
-
-  const marker = L.marker({
-    lat,
-    lng,
-  },
-  {
-    draggable: false,
-    icon: pinIcon,
-  });
-
-  marker.addTo(map).bindPopup(getOffer(offer));
-}
-
-// Функция добавления похожих объявлений
-
-function createSimilarOffersMarkers (offers) {
-  const pinIcon = L.icon({
-    iconUrl: iconUrl,
-    iconSize: iconSizes,
-    iconAnchor: iconAnchorCoords,
-  });
-
-  offers.slice(0, OFFERS_QUANTITY).forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
-}
+let markerGroup;
 
 // Функция добавления карты
 
@@ -88,9 +50,66 @@ function loadMap () {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
+
+  markerGroup = L.layerGroup().addTo(map);
 }
 
-// Чистим карту
+// Функция для добавления основного маркера
+
+function createMainOfferMarker () {
+  mainPinMarker.addTo(map);
+
+  mainPinMarker.on('move', (evt) => {
+    const coords = evt.target.getLatLng();
+    addressInput.value = `${coords.lat.toFixed(5)  }, ${  coords.lng.toFixed(5)}`;
+  });
+}
+
+// Чистим метки
+
+function clearMarkers () {
+  markerGroup.clearLayers();
+}
+
+// Закрываем попапы
+
+function closePopup () {
+  map.closePopup();
+}
+
+// Функция для создания одного похожего объявления
+
+function createSimilarOfferMarker (offer, pinIcon) {
+  const {location} = offer;
+  const {lat, lng} = location;
+
+  const marker = L.marker({
+    lat,
+    lng,
+  },
+  {
+    draggable: false,
+    icon: pinIcon,
+  });
+
+  marker.addTo(markerGroup).bindPopup(getOffer(offer));
+}
+
+// Функция добавления похожих объявлений
+
+function createSimilarOffersMarkers (offers) {
+  clearMarkers();
+
+  const pinIcon = L.icon({
+    iconUrl: iconUrl,
+    iconSize: iconSizes,
+    iconAnchor: iconAnchorCoords,
+  });
+
+  offers.slice(0, OFFERS_QUANTITY).forEach((offer) => createSimilarOfferMarker(offer, pinIcon));
+}
+
+// Сбрасываем карту
 
 function resetMap () {
   map.setView(
@@ -98,7 +117,6 @@ function resetMap () {
     SCALE,
   );
   mainPinMarker.setLatLng(COORDS);
-  map.closePopup();
 }
 
-export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers};
+export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers, closePopup, clearMarkers};

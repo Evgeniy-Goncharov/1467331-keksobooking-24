@@ -1,6 +1,3 @@
-// Объявляем константы
-
-
 const HOUSE_TYPES = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -8,8 +5,6 @@ const HOUSE_TYPES = {
   palace: 'Дворец',
   hotel: 'Отель',
 };
-
-// Объявляем переменные
 
 const offerTemplate = document.querySelector('#card').content.querySelector('.popup');
 
