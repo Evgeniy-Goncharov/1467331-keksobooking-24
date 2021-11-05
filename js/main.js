@@ -4,7 +4,6 @@ import { loadMap, createMainOfferMarker, createSimilarOffersMarkers } from './ma
 import { getData } from './api.js';
 import { showAlert } from './util.js';
 import { debounce } from './utils/debounce.js';
-import './upload.js';
 
 const OFFERS_QUANTITY = 10;
 const CREATE_MARKER_DELAY = 500;
