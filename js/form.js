@@ -189,10 +189,7 @@ function setFormSubmit () {
 
     const formData = new FormData(evt.target);
 
-    sendData(() => {
-      showSuccessMessage();
-      clearForm();
-    }, showErrorMessage, formData);
+    sendData(showSuccessMessage, showErrorMessage, formData);
   });
 }
 
