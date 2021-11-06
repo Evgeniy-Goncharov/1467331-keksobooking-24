@@ -38,6 +38,8 @@ function setFileUploadPreview (chooser, preview) {
 function clearFileUploadPreview () {
   avatarPreview.innerHTML = defaultAvatarPreview;
   imagesPreview.innerHTML = defaultImagesPreview;
+  setFileUploadPreview(avatarChooser, avatarPreview);
+  setFileUploadPreview (imagesChooser, imagesPreview);
 }
 
 setFileUploadPreview(avatarChooser, avatarPreview);
