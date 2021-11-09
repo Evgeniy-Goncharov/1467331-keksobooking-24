@@ -7,14 +7,15 @@ const form = document.querySelector('.ad-form');
 const titleInput = form.querySelector('#title');
 const priceInput = form.querySelector('#price');
 const typeSelect = form.querySelector('#type');
-const timeinSelect = form.querySelector('#timein');
-const timeoutSelect = form.querySelector('#timeout');
+const timeInSelect = form.querySelector('#timein');
+const timeOutSelect = form.querySelector('#timeout');
 const roomNumberSelect = form.querySelector('#room_number');
 const capacitySelect = form.querySelector('#capacity');
 const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+const formFieldsets = form.querySelectorAll('fieldset');
 
 let message;
 
@@ -41,8 +42,6 @@ function getGuestsValidity (rooms, guests) {
 // Функции для деактивации формы
 
 function disableForm () {
-  const formFieldsets = form.querySelectorAll('fieldset');
-
   form.classList.add('ad-form--disabled');
 
   formFieldsets.forEach((element) => element.disabled = true);
@@ -51,8 +50,6 @@ function disableForm () {
 // Активации форм
 
 function enableForm () {
-  const formFieldsets = form.querySelectorAll('fieldset');
-
   form.classList.remove('ad-form--disabled');
   formFieldsets.forEach((element) => element.disabled = false);
 }
@@ -85,8 +82,8 @@ function getMinPrice(type) {
 // Синхронизируем поля "въезд, выезд"
 
 function synchronizeTimeInputs (time) {
-  timeinSelect.value = time;
-  timeoutSelect.value = time;
+  timeInSelect.value = time;
+  timeOutSelect.value = time;
 }
 
 // Обработчик ввода заголовка
@@ -132,13 +129,13 @@ priceInput.addEventListener('input', () => {
 
 // Обработчик времени заезда
 
-timeinSelect.addEventListener('change', (evt) => {
+timeInSelect.addEventListener('change', (evt) => {
   synchronizeTimeInputs(evt.target.value);
 });
 
 // Обработчик времени выезда
 
-timeoutSelect.addEventListener('change', (evt) => {
+timeOutSelect.addEventListener('change', (evt) => {
   synchronizeTimeInputs(evt.target.value);
 });
 

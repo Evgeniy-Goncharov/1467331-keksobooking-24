@@ -1,41 +1,37 @@
 import { closePopup } from './map.js';
 
-const mapFilters = document.querySelector('.map__filters');
-const featuresFilter = mapFilters.querySelector('.map__features');
+const mapFilter = document.querySelector('.map__filters');
+const featuresFilter = mapFilter.querySelector('.map__features');
+const mapFiltersElements = mapFilter.querySelectorAll('.map__filter');
+const mapFiltersFieldsets = mapFilter.querySelectorAll('fieldset');
+const typeSelect = mapFilter.querySelector('#housing-type');
+const priceSelect = mapFilter.querySelector('#housing-price');
+const roomsSelect = mapFilter.querySelector('#housing-rooms');
+const guestsSelect = mapFilter.querySelector('#housing-guests');
 
 function disableFilter() {
-  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
-  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
-
-  mapFilters.classList.add('map__filters--disabled');
+  mapFilter.classList.add('map__filters--disabled');
 
   mapFiltersElements.forEach((element) => element.disabled = true);
   mapFiltersFieldsets.forEach((element) => element.disabled = true);
 }
 
 function enableFilter() {
-  const mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
-  const mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
-
-  mapFilters.classList.remove('map__filters--disabled');
+  mapFilter.classList.remove('map__filters--disabled');
 
   mapFiltersElements.forEach((element) => element.disabled = false);
   mapFiltersFieldsets.forEach((element) => element.disabled = false);
 }
 
 function clearFilter () {
-  mapFilters.reset();
+  mapFilter.reset();
 }
 
 function isFilter (value) {
   return value === 'any';
 }
 
-const filterOffers = (offers) => {
-  const typeSelect = mapFilters.querySelector('#housing-type');
-  const priceSelect = mapFilters.querySelector('#housing-price');
-  const roomsSelect = mapFilters.querySelector('#housing-rooms');
-  const guestsSelect = mapFilters.querySelector('#housing-guests');
+function filterOffers (offers) {
   let filteredOffers = offers.slice();
 
   function filterData (value, cb) {
@@ -51,9 +47,12 @@ const filterOffers = (offers) => {
 
   function filterOnPrice ({offer}) {
     switch(priceSelect.value) {
-      case 'middle': return 10000 < offer.price && offer.price < 50000;
-      case 'low': return offer.price < 10000;
-      case 'high': return 50000 < offer.price;
+      case 'middle':
+        return 10000 < offer.price && offer.price < 50000;
+      case 'low':
+        return offer.price < 10000;
+      case 'high':
+        return 50000 < offer.price;
     }
   }
 
@@ -71,7 +70,7 @@ const filterOffers = (offers) => {
   filteredOffers = filterData(guestsSelect.value, filterOnGuests);
 
   return filteredOffers;
-};
+}
 
 function sortOffersByRank (offers) {
   const checkedFeatures = [];
@@ -114,7 +113,7 @@ function getFilteredSortedOffers (offers) {
 }
 
 function setFilterClick (offers, cb) {
-  mapFilters.addEventListener('change', () => {
+  mapFilter.addEventListener('change', () => {
     closePopup();
     cb(getFilteredSortedOffers(offers));
   });

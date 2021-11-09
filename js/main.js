@@ -2,8 +2,7 @@ import { disableForm, setFormSubmit } from './form.js';
 import { disableFilter, setFilterClick } from './filter.js';
 import { loadMap, createMainOfferMarker, createSimilarOffersMarkers } from './map.js';
 import { getData } from './api.js';
-import { showAlert } from './util.js';
-import { debounce } from './utils/debounce.js';
+import { showAlert, debounce } from './util.js';
 import './upload.js';
 
 const OFFERS_QUANTITY = 10;
