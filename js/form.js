@@ -1,6 +1,7 @@
 import { sendData } from './api.js';
 import { COORDS, addressInput, resetMap, closePopup } from './map.js';
 import { clearFilter } from './filter.js';
+import { clearFileUploadPreview } from './upload.js';
 
 const form = document.querySelector('.ad-form');
 const titleInput = form.querySelector('#title');
@@ -14,6 +15,7 @@ const submitButton = form.querySelector('.ad-form__submit');
 const resetButton = form.querySelector('.ad-form__reset');
 const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+
 let message;
 
 // Функция для проверки количества комнат и гостей
@@ -60,6 +62,7 @@ function enableForm () {
 function clearForm () {
   form.reset();
   addressInput.value = `${COORDS.lat}, ${COORDS.lng}`;
+  clearFileUploadPreview();
 }
 
 // Получаем минимальное значение в поле "Цена за ночь"
@@ -178,6 +181,7 @@ resetButton.addEventListener('click', (evt) => {
   resetMap();
 });
 
+
 // Обработчик отправки формы
 function setFormSubmit () {
   form.addEventListener('submit', (evt) => {
@@ -235,4 +239,4 @@ function showErrorMessage () {
   document.body.appendChild(message);
 }
 
-export { disableForm, enableForm, clearForm, setFormSubmit };
+export { disableForm, enableForm, clearForm, setFormSubmit, form };

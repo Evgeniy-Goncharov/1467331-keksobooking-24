@@ -1,3 +1,5 @@
+import { closePopup } from './map.js';
+
 const mapFilters = document.querySelector('.map__filters');
 const featuresFilter = mapFilters.querySelector('.map__features');
 
@@ -60,13 +62,7 @@ const filterOffers = (offers) => {
   }
 
   function filterOnGuests ({offer}) {
-    const value = Number(guestsSelect.value);
-    const guests = Number(offer.guests);
-    if(value !== 0) {
-      return guests <= value;
-    } else {
-      return guests > 3;
-    }
+    return Number(guestsSelect.value) === Number(offer.guests);
   }
 
   filteredOffers = filterData(typeSelect.value, filterOnType);
@@ -85,12 +81,10 @@ function sortOffersByRank (offers) {
   }
 
   function getCheckedFeatures () {
-    const featureInputs = featuresFilter.querySelectorAll('[type="checkbox"]');
+    const featureInputs = featuresFilter.querySelectorAll('[type="checkbox"]:checked');
 
     for (const input of featureInputs) {
-      if (input.checked) {
-        checkedFeatures.push(input.value);
-      }
+      checkedFeatures.push(input.value);
     }
   }
 
@@ -113,7 +107,7 @@ function sortOffersByRank (offers) {
   offers.sort((a, b) => getOfferRank(b) - getOfferRank(a));
 }
 
-function getFilteredSortedoffers (offers) {
+function getFilteredSortedOffers (offers) {
   const filteredOffers = filterOffers(offers);
   sortOffersByRank(filteredOffers);
   return filteredOffers;
@@ -121,7 +115,8 @@ function getFilteredSortedoffers (offers) {
 
 function setFilterClick (offers, cb) {
   mapFilters.addEventListener('change', () => {
-    cb(getFilteredSortedoffers(offers));
+    closePopup();
+    cb(getFilteredSortedOffers(offers));
   });
 }
 
