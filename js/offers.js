@@ -11,43 +11,43 @@ const offerTemplate = document.querySelector('#card').content.querySelector('.po
 // Функция для получения разметки списка преимуществ
 
 function getOfferFeatures(card, features = []) {
-  const templateFeatures = card.querySelector('.popup__features');
+  const featuresTemplate = card.querySelector('.popup__features');
 
   if (features.length > 0) {
-    const featuresList = templateFeatures.querySelectorAll('.popup__feature');
+    const popupFeatures = featuresTemplate.querySelectorAll('.popup__feature');
 
-    featuresList.forEach((featuresListItem) => {
+    popupFeatures.forEach((popupFeaturesItem) => {
       const isNecessary = features.some(
-        (feature) => featuresListItem.classList.contains(`popup__feature--${ feature}`),
+        (feature) => popupFeaturesItem.classList.contains(`popup__feature--${ feature}`),
       );
 
       if (!isNecessary) {
-        featuresListItem.remove();
+        popupFeaturesItem.remove();
       }
     });
   } else {
-    templateFeatures.classList.add('hidden');
+    featuresTemplate.classList.add('hidden');
   }
 }
 
 // Функция для получения разметки списка фотографий
 
 function getOfferPhotos (card, photos = []) {
-  const photosList = card.querySelector('.popup__photos');
+  const popupPhotos = card.querySelector('.popup__photos');
 
   if (photos.length > 0) {
-    const photosItem = photosList.querySelector('img');
-    const photosListFragment = document.createDocumentFragment();
+    const photosItem = popupPhotos.querySelector('img');
+    const popupPhotosFragment = document.createDocumentFragment();
 
     photos.forEach((photo) => {
       const newPhotosItem = photosItem.cloneNode(true);
       newPhotosItem.src = photo;
-      photosListFragment.appendChild(newPhotosItem);
+      popupPhotosFragment.appendChild(newPhotosItem);
     });
 
-    photosList.innerHTML = '';
-    photosList.appendChild(photosListFragment);
-  } else {photosList.classList.add('hidden');}
+    popupPhotos.innerHTML = '';
+    popupPhotos.appendChild(popupPhotosFragment);
+  } else {popupPhotos.classList.add('hidden');}
 }
 
 // Функция для получения разметки объявления
