@@ -1,3 +1,5 @@
+import { closePopup } from './map.js';
+
 const mapFilters = document.querySelector('.map__filters');
 const featuresFilter = mapFilters.querySelector('.map__features');
 
@@ -113,6 +115,7 @@ function getFilteredSortedOffers (offers) {
 
 function setFilterClick (offers, cb) {
   mapFilters.addEventListener('change', () => {
+    closePopup();
     cb(getFilteredSortedOffers(offers));
   });
 }

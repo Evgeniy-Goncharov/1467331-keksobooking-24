@@ -9,15 +9,16 @@ const defaultAvatarPreview = avatarPreview.innerHTML;
 const defaultImagesPreview = imagesPreview.innerHTML;
 
 function setFileUploadPreview (chooser, preview) {
-  let previewImage = preview.querySelector('img');
 
-  chooser.addEventListener('change', () => {
+  function onChooserChange () {
+    let previewImage = preview.querySelector('img');
     const file = chooser.files[0];
     const fileName = file.name.toLowerCase();
 
     const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
 
     if (matches) {
+      chooser.setCustomValidity('');
       if (previewImage) {
         previewImage.style.width = '70px';
         previewImage.style.height = '70px';
@@ -31,15 +32,19 @@ function setFileUploadPreview (chooser, preview) {
         previewImage.src =  URL.createObjectURL(file);
         preview.append(previewImage);
       }
+    } else {
+      chooser.setCustomValidity('Добавьте изображение в формате JPG, JPEG, PNG или GIF!');
     }
-  });
+
+    chooser.reportValidity();
+  }
+
+  chooser.addEventListener('change', onChooserChange);
 }
 
 function clearFileUploadPreview () {
   avatarPreview.innerHTML = defaultAvatarPreview;
   imagesPreview.innerHTML = defaultImagesPreview;
-  setFileUploadPreview(avatarChooser, avatarPreview);
-  setFileUploadPreview (imagesChooser, imagesPreview);
 }
 
 setFileUploadPreview(avatarChooser, avatarPreview);
