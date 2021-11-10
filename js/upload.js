@@ -5,8 +5,8 @@ const avatarChooser = form.querySelector('#avatar');
 const avatarPreview = form.querySelector('.ad-form-header__preview');
 const imagesChooser = form.querySelector('#images');
 const imagesPreview = form.querySelector('.ad-form__photo');
-const defaultAvatarPreview = avatarPreview.innerHTML;
-const defaultImagesPreview = imagesPreview.innerHTML;
+const defaultAvatarPreview = '<img src="img/muffin-grey.svg" alt="Аватар пользователя" width="40" height="44">';
+const defaultImagesPreview = '';
 
 function setFileUploadPreview (chooser, preview) {
 

@@ -1,5 +1,10 @@
 import { closePopup } from './map.js';
 
+const PRICES = {
+  low: 10000,
+  high: 50000,
+};
+
 const mapFilter = document.querySelector('.map__filters');
 const featuresFilter = mapFilter.querySelector('.map__features');
 const mapFiltersElements = mapFilter.querySelectorAll('.map__filter');
@@ -46,13 +51,15 @@ function filterOffers (offers) {
   }
 
   function filterOnPrice ({offer}) {
+    const {low, high} = PRICES;
+
     switch(priceSelect.value) {
       case 'middle':
-        return 10000 < offer.price && offer.price < 50000;
+        return low < offer.price && offer.price < high;
       case 'low':
-        return offer.price < 10000;
+        return offer.price < low;
       case 'high':
-        return 50000 < offer.price;
+        return high < offer.price;
     }
   }
 
@@ -119,4 +126,4 @@ function setFilterClick (offers, cb) {
   });
 }
 
-export { disableFilter, enableFilter, clearFilter, setFilterClick };
+export { disableFilter, enableFilter, clearFilter, setFilterClick, getFilteredSortedOffers };

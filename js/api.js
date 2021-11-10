@@ -1,7 +1,11 @@
 import { disableFilter } from './filter.js';
 
+const SERVER_URL = 'https://24.javascript.pages.academy/keksobooking';
+
+let loadedOffers;
+
 function getData (onSuccess, onFail) {
-  fetch('https://24.javascript.pages.academy/keksobooking/data')
+  fetch(`${SERVER_URL}/data`)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -10,6 +14,7 @@ function getData (onSuccess, onFail) {
       throw new Error();
     })
     .then((offers) => {
+      loadedOffers = offers;
       onSuccess(offers);
     })
     .catch(() => {
@@ -20,7 +25,7 @@ function getData (onSuccess, onFail) {
 
 function sendData (onSuccess, onFail, data) {
   fetch(
-    'https://24.javascript.pages.academy/keksobooking',
+    SERVER_URL,
     {
       method: 'POST',
       body: data,
@@ -38,4 +43,4 @@ function sendData (onSuccess, onFail, data) {
     });
 }
 
-export { getData, sendData };
+export { getData, sendData, loadedOffers };

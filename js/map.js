@@ -1,8 +1,11 @@
 import { enableForm } from './form.js';
-import { enableFilter } from './filter.js';
+import { enableFilter, setFilterClick } from './filter.js';
 import { getOffer } from './offers.js';
 import { OFFERS_QUANTITY } from './main.js';
+import { getData } from './api.js';
+import { debounce, showAlert } from './util.js';
 
+const CREATE_MARKER_DELAY = 500;
 const COORDS = {
   lat: 35.68225,
   lng: 139.75196,
@@ -37,8 +40,15 @@ let markerGroup;
 function loadMap () {
   map = L.map('map-canvas')
     .on('load', () => {
-      enableFilter();
-      enableForm();
+      getData((offers) => {
+        createSimilarOffersMarkers(offers);
+        enableFilter();
+        enableForm();
+        setFilterClick(offers, debounce(createSimilarOffersMarkers, CREATE_MARKER_DELAY));
+      }, () => {
+        showAlert();
+        enableForm();
+      });
       addressInput.value = `${COORDS.lat  }, ${  COORDS.lng}`;
     })
 
@@ -119,4 +129,4 @@ function resetMap () {
   mainPinMarker.setLatLng(COORDS);
 }
 
-export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers, closePopup, clearMarkers};
+export {addressInput, COORDS, loadMap, createMainOfferMarker, resetMap, createSimilarOffersMarkers, closePopup, clearMarkers };

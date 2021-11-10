@@ -1,11 +1,20 @@
-import { sendData } from './api.js';
-import { COORDS, addressInput, resetMap, closePopup } from './map.js';
+import { loadedOffers, sendData } from './api.js';
+import { COORDS, addressInput, resetMap, closePopup, createSimilarOffersMarkers } from './map.js';
 import { clearFilter } from './filter.js';
 import { clearFileUploadPreview } from './upload.js';
+
+const MIN_GUESTS = 0;
+const MAX_ROOMS = 100;
+const BUNGALOW_MIN_PRICE = 0;
+const FLAT_MIN_PRICE = 1000;
+const HOTEL_MIN_PRICE = 3000;
+const HOUSE_MIN_PRICE = 5000;
+const PALACE_MIN_PRICE = 10000;
 
 const form = document.querySelector('.ad-form');
 const titleInput = form.querySelector('#title');
 const priceInput = form.querySelector('#price');
+const defaultMinPrice = priceInput.min;
 const typeSelect = form.querySelector('#type');
 const timeInSelect = form.querySelector('#timein');
 const timeOutSelect = form.querySelector('#timeout');
@@ -27,9 +36,9 @@ function getGuestsValidity (rooms, guests) {
 
   if (guestsNumber > roomsNumber) {
     capacitySelect.setCustomValidity('Число гостей дожно быть не больше количества комнат');
-  } else if (roomsNumber === 100 && guestsNumber !== 0) {
+  } else if (roomsNumber === MAX_ROOMS && guestsNumber !== MIN_GUESTS) {
     capacitySelect.setCustomValidity('Выберите пункт (Не для гостей)');
-  } else if (guestsNumber === 0 && roomsNumber !== 100) {
+  } else if (guestsNumber === MIN_GUESTS && roomsNumber !== MAX_ROOMS) {
     capacitySelect.setCustomValidity('Выберите количество комнат - 100');
   } else {
     capacitySelect.setCustomValidity('');
@@ -57,6 +66,8 @@ function enableForm () {
 // Очитска полей
 
 function clearForm () {
+  priceInput.min = defaultMinPrice;
+  priceInput.placeholder = defaultMinPrice;
   form.reset();
   addressInput.value = `${COORDS.lat}, ${COORDS.lng}`;
   clearFileUploadPreview();
@@ -67,15 +78,15 @@ function clearForm () {
 function getMinPrice(type) {
   switch(type) {
     case 'bungalow':
-      return 0;
+      return BUNGALOW_MIN_PRICE;
     case 'flat':
-      return 1000;
+      return FLAT_MIN_PRICE;
     case 'hotel':
-      return 3000;
+      return HOTEL_MIN_PRICE;
     case 'house':
-      return 5000;
+      return HOUSE_MIN_PRICE;
     case 'palace':
-      return 10000;
+      return PALACE_MIN_PRICE;
   }
 }
 
@@ -90,8 +101,8 @@ function synchronizeTimeInputs (time) {
 
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
-  const min = titleInput.getAttribute('minlength');
-  const max = titleInput.getAttribute('maxlength');
+  const min = titleInput.minLength;
+  const max = titleInput.maxLength;
 
   if (valueLength < min) {
     titleInput.setCustomValidity(`Ещё ${ min - valueLength } симв.`);
@@ -176,6 +187,7 @@ resetButton.addEventListener('click', (evt) => {
   clearForm();
   closePopup();
   resetMap();
+  createSimilarOffersMarkers(loadedOffers);
 });
 
 
@@ -186,7 +198,14 @@ function setFormSubmit () {
 
     const formData = new FormData(evt.target);
 
-    sendData(showSuccessMessage, showErrorMessage, formData);
+    sendData(() => {
+      showSuccessMessage();
+      clearFilter();
+      clearForm();
+      closePopup();
+      resetMap();
+      createSimilarOffersMarkers(loadedOffers);
+    }, showErrorMessage, formData);
   });
 }
 
