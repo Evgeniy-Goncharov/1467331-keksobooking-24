@@ -13,10 +13,10 @@ const COORDS = {
 const SCALE = 15;
 
 const addressInput = document.querySelector('#address');
-const mainIconUrl = './../img/main-pin.svg';
+const mainIconUrl = './img/main-pin.svg';
 const mainIconSizes = [52, 52];
 const mainIconAnchorCoords = [26, 52];
-const iconUrl = './../img/pin.svg';
+const iconUrl = './img/pin.svg';
 const iconSizes = [40, 40];
 const iconAnchorCoords = [20, 40];
 const mainPinIcon = L.icon({
